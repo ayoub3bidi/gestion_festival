@@ -1,10 +1,10 @@
 version: '3.3'
 services:
-  mercury_api:
+  festival_api:
     restart: always
-    image: mercury_api:latest
+    image: festival_api:latest
     networks:
-      - mercury_api
+      - festival_api
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -14,47 +14,47 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - mercury_cache
-      - mercury_db
-      - mercury_migrate
-  mercury_cache:
+      - festival_cache
+      - festival_db
+      - festival_migrate
+  festival_cache:
     image: redis:6.2.6
     restart: always
-    container_name: mercury_cache
+    container_name: festival_cache
     networks:
-      - mercury_api
-  mercury_migrate:
+      - festival_api
+  festival_migrate:
     image: flyway/flyway:7.15.0
-    container_name: mercury_migrate
+    container_name: festival_migrate
     command: -mixed=true -url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}" -user="${POSTGRES_USER}" -password="${POSTGRES_PASSWORD}" migrate
     volumes:
       - ./src/migrations:/flyway/sql
     env_file:
       - .env
     depends_on:
-      - mercury_db
+      - festival_db
     networks:
-      - mercury_api
-  mercury_db:
+      - festival_api
+  festival_db:
     image: postgres:13
-    container_name: mercury_db
+    container_name: festival_db
     ports:
       - 5432:5432
     restart: always
     volumes:
-      - mercurydb:/var/lib/postgresql/data
+      - festivaldb:/var/lib/postgresql/data
     env_file:
       - .env
     networks:
-      - mercury_api
-  mercury_integration_tests:
+      - festival_api
+  festival_integration_tests:
     build:
       context: .
       dockerfile: ./Dockerfile
       target: integration_tests
     env_file:
       - .env
-  mercury_unit_tests:
+  festival_unit_tests:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -63,8 +63,8 @@ services:
       - .env
 
 volumes:
-  mercurydb:
+  festivaldb:
 
 networks:
-  mercury_api:
+  festival_api:
     driver: bridge

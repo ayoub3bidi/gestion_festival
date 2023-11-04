@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS public.user (
     username VARCHAR(200),
     email VARCHAR(200),
     password VARCHAR(200),
+    profession VARCHAR(200),
     is_admin BOOLEAN,
     disabled BOOLEAN
 );

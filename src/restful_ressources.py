@@ -14,6 +14,6 @@ def import_resources(app):
     app.include_router(admin_user.router, tags=['Admin'], prefix=f'/{v}/admin/user')
     app.include_router(user.router, tags=['User'], prefix=f'/{v}/user')
     app.include_router(room.router, tags=['Room'], prefix=f'/{v}/room')
-    app.include_router(admin_room.router, tags=['Room'], prefix=f'/{v}/admin/room')
     app.include_router(show_type.router, tags=['Show Type'], prefix=f'/{v}/show-type')
-    app.include_router(admin_show_type.router, tags=['Show Type'], prefix=f'/{v}/admin/show-type')
+    app.include_router(admin_room.router, tags=['Room Administration'], prefix=f'/{v}/admin/room')
+    app.include_router(admin_show_type.router, tags=['Show Type Administration'], prefix=f'/{v}/admin/show-type')

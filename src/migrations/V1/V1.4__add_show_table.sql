@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS public.show (
     available_seats INTEGER,
     room_name VARCHAR(200),
     show_type VARCHAR(200),
-    price_normal INTEGER,
-    price_reduced INTEGER,
-    price_collective INTEGER,
+    price_normal numeric(10, 2)
+    price_reduced numeric(10, 2),
+    price_collective numeric(10, 2),
     is_exceptional BOOLEAN,
     is_available BOOLEAN,
     room_id uuid REFERENCES public.room(id)

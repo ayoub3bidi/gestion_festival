@@ -1,5 +1,5 @@
 from database.postgres_db import Base
-from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy import Column, String, Integer, Boolean, Numeric
 from fastapi_utils.guid_type import GUID, GUID_SERVER_DEFAULT_POSTGRESQL
 
 class Show(Base):
@@ -13,9 +13,9 @@ class Show(Base):
     available_seats = Column(Integer, nullable=False)
     room_name = Column(String, nullable=False)
     show_type = Column(String, nullable=False)
-    price_normal = Column(Integer, nullable=False)
-    price_reduced = Column(Integer, nullable=False)
-    price_collective = Column(Integer, nullable=False)
+    price_normal = Column(Numeric, nullable=False)
+    price_reduced = Column(Numeric, nullable=False)
+    price_collective = Column(Numeric, nullable=False)
     is_exceptional = Column(Boolean, default=False)
     is_available = Column(Boolean, default=True)
     room_id = Column(GUID, nullable=False)

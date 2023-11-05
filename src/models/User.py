@@ -9,6 +9,7 @@ class User(Base):
     id = Column(GUID, primary_key=True, server_default=GUID_SERVER_DEFAULT_POSTGRESQL)
     username = Column(String, nullable=True, default="")
     email = Column(String, nullable=False, unique=True)
+    job = Column(String, nullable=True)
     password = Column(String, nullable=False)
     is_admin = Column(Boolean, nullable=True, default=False)
     disabled = Column(Boolean, nullable=True, default=False)

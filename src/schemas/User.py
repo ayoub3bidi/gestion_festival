@@ -14,6 +14,7 @@ class UserSchema(BaseModel):
     id: int
     username: Optional[str] = None
     email: str
+    job: Optional[str] = None
     disabled: Optional[bool] = None
     is_admin: Optional[bool] = None
 
@@ -25,6 +26,7 @@ class UserSchema(BaseModel):
 class UserAdminRegisterSchema(BaseModel):
     username: Optional[str] = None
     email: str
+    job: Optional[str] = None
     password: str
     disabled: Optional[bool] = None
     is_admin: Optional[bool] = None
@@ -37,6 +39,7 @@ class UserAdminRegisterSchema(BaseModel):
 class UserAdminUpdateSchema(BaseModel):
     username: Optional[str] = None
     email: Optional[str] = None
+    job: Optional[str] = None
     password: Optional[str] = None
     disabled: Optional[bool] = None
     is_admin: Optional[bool] = None
@@ -49,6 +52,7 @@ class UserAdminUpdateSchema(BaseModel):
 class UserRegisterSchema(BaseModel):
     username: Optional[str] = None
     email: str
+    job: Optional[str] = None
     password: str
 
     class Config:
@@ -59,6 +63,7 @@ class UserRegisterSchema(BaseModel):
 class UserUpdateSchema(BaseModel):
     username: Optional[str] = None
     email: Optional[str] = None
+    job: Optional[str] = None
     password: Optional[str] = None
 
     class Config:

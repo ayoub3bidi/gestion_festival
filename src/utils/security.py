@@ -18,15 +18,13 @@ pwd_context = CryptContext(schemes=[crypting_algorithm], deprecated="auto")
 db = SessionLocal()
 
 def create_admin_user():
-    user = db.query(User).filter(User.email == ADMIN_EMAIL).first()
-    if not user:
-        password = get_password_hash(ADMIN_PASSWORD)
-        new_user = User(username=ADMIN_USERNAME, email=ADMIN_EMAIL, password=password, is_admin=True)
-        db.add(new_user)
-        db.commit()
-        db.refresh(new_user)  
+    password = get_password_hash(ADMIN_PASSWORD)
+    new_user = User(username=ADMIN_USERNAME, email=ADMIN_EMAIL, password=password, is_admin=True)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)  
         
-def create_predefined_data_rooms():
+def create_predefined_rooms():
     room_data = [
         {"name": "Room 1", "capacity": 600},
         {"name": "Room 2", "capacity": 300},
@@ -41,7 +39,7 @@ def create_predefined_data_rooms():
     for room in rooms:
         db.refresh(room)
     
-def create_predefined_data_show_types():
+def create_predefined_show_types():
     show_type_names = ["Théâtre", "Cinéma", "Musique", "Rencontre", "Animation"]
 
     show_types = [ShowType(name=name) for name in show_type_names]
@@ -52,6 +50,13 @@ def create_predefined_data_show_types():
 
     for show_type in show_types:
         db.refresh(show_type)
+        
+def create_predefined_data():
+    user = db.query(User).filter(User.email == ADMIN_EMAIL).first()
+    if not user:
+        create_admin_user()
+        create_predefined_rooms()
+        create_predefined_show_types()
     
 
 def validate_email(email):

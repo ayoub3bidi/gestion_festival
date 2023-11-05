@@ -7,6 +7,8 @@ from jose import jwt
 from fastapi import HTTPException, status
 from constants.environment_variables import ACCESS_TOKEN_EXPIRE_MINUTES, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME, JWT_ALGORITHM, JWT_SECRET_KEY
 from models.User import User
+from models.Room import Room
+from models.ShowType import ShowType
 from database.postgres_db import SessionLocal
 from constants.regex import email_regex, password_regex
 
@@ -23,6 +25,34 @@ def create_admin_user():
         db.add(new_user)
         db.commit()
         db.refresh(new_user)  
+        
+def create_predefined_data_rooms():
+    room_data = [
+        {"name": "Room 1", "capacity": 600},
+        {"name": "Room 2", "capacity": 300},
+    ]
+
+    rooms = [Room(name=data["name"], capacity=data["capacity"]) for data in room_data]
+    for room in rooms:
+        db.add(room)
+
+    db.commit()
+
+    for room in rooms:
+        db.refresh(room)
+    
+def create_predefined_data_show_types():
+    show_type_names = ["Théâtre", "Cinéma", "Musique", "Rencontre", "Animation"]
+
+    show_types = [ShowType(name=name) for name in show_type_names]
+    for show_type in show_types:
+        db.add(show_type)
+
+    db.commit()
+
+    for show_type in show_types:
+        db.refresh(show_type)
+    
 
 def validate_email(email):
     if re.search(email_regex, email):

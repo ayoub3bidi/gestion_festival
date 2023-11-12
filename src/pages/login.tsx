@@ -7,30 +7,57 @@ import SectionFullScreen from '../components/Section/FullScreen'
 import LayoutGuest from '../layouts/Guest'
 import { Field, Form, Formik } from 'formik'
 import FormField from '../components/Form/Field'
-import FormCheckRadio from '../components/Form/CheckRadio'
 import Divider from '../components/Divider'
 import Buttons from '../components/Buttons'
 import { useRouter } from 'next/router'
 import { getPageTitle } from '../config'
+import axios from 'axios'
+import { apiLink } from '../config'
 
 type LoginForm = {
-  login: string
+  email: string
   password: string
-  remember: boolean
 }
 
 const LoginPage = () => {
   const router = useRouter()
 
-  const handleSubmit = (formValues: LoginForm) => {
-    router.push('/dashboard')
-    console.log('Form values', formValues)
+  const handlePagesDirection = async (token) => {
+    try {
+      const response = await axios.get(`${apiLink}/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.is_admin) {
+        router.push({
+          pathname: '/dashboard',
+          query: { token: token },
+        })
+      } else {
+        // TODO: redirect to user page
+        router.push('/home')
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSubmit = async (formValues: LoginForm) => {
+    try {
+      const response = await axios.post(`${apiLink}/user/login`, {
+        email: formValues.email,
+        password: formValues.password,
+      });
+      await handlePagesDirection(response.data.token.access_token)
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const initialValues: LoginForm = {
-    login: 'john.doe',
-    password: 'bG1sL9eQ1uD2sK3b',
-    remember: true,
+    email: 'admin@festival.io',
+    password: 'GoodPassword123',
   }
 
   return (
@@ -43,23 +70,17 @@ const LoginPage = () => {
         <CardBox className="w-11/12 md:w-7/12 lg:w-6/12 xl:w-4/12 shadow-2xl">
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             <Form>
-              <FormField label="Login" help="Please enter your login">
-                <Field name="login" />
+              <FormField label="Email" help="Please enter your email">
+                <Field name="email" />
               </FormField>
 
               <FormField label="Password" help="Please enter your password">
                 <Field name="password" type="password" />
               </FormField>
-
-              <FormCheckRadio type="checkbox" label="Remember">
-                <Field type="checkbox" name="remember" />
-              </FormCheckRadio>
-
               <Divider />
 
               <Buttons>
                 <Button type="submit" label="Login" color="info" />
-                <Button href="/dashboard" label="Home" color="info" outline />
               </Buttons>
             </Form>
           </Formik>

@@ -1,9 +1,12 @@
 import {
   mdiAccountMultiple,
-  mdiCartOutline,
+  mdiCashMultiple,
   mdiChartPie,
-  mdiChartTimelineVariant,
+  mdiDoor,
+  mdiMagicStaff,
   mdiReload,
+  mdiTheater,
+  mdiTicket,
 } from '@mdi/js'
 import Head from 'next/head'
 import React, { useState } from 'react'
@@ -22,13 +25,20 @@ import CardBox from '../components/CardBox'
 import { sampleChartData } from '../components/ChartLineSample/config'
 import ChartLineSample from '../components/ChartLineSample'
 import TableSampleClients from '../components/Table/SampleClients'
-import { getPageTitle } from '../config'
+import { apiLink, getPageTitle } from '../config'
+import axios from 'axios'
 
 const DashboardPage = () => {
   const { clients } = useSampleClients()
   const { transactions } = useSampleTransactions()
 
   const clientsListed = clients.slice(0, 4)
+  const [users, setUsers] = useState([])
+  const [rooms, setRooms] = useState([])
+  const [showTypes, setShowTypes] = useState([])
+  const [shows, setShows] = useState([])
+  const [tickets, setTickets] = useState([])
+
 
   const [chartData, setChartData] = useState(sampleChartData())
 
@@ -37,6 +47,99 @@ const DashboardPage = () => {
 
     setChartData(sampleChartData())
   }
+
+  const token = localStorage.getItem('token')
+
+  const handleClients = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/admin/user/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      for (let i = 0; i < response.data.length; i++) {
+        const user = response.data[i]
+        if (!user.is_admin) {
+          setUsers((prev) => [...prev, user])
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleRooms = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/room`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      setRooms(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleShowTypes = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/show-type`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      setShowTypes(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleShows = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/show`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      setShows(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleTickets = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/ticket`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      setTickets(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  React.useEffect(() => {
+    if (token) {
+      handleClients()
+      handleRooms()
+      handleShowTypes()
+      handleShows()
+      handleTickets()
+    }
+  }, [])
 
   return (
     <>
@@ -49,25 +152,61 @@ const DashboardPage = () => {
         </div> */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
           <CardBoxWidget
-            trendLabel="12%"
-            trendType="up"
+            // trendLabel="12%"
+            // trendType="up"
+            trendColor="success"
+            icon={mdiDoor}
+            iconColor="contrast"
+            number={rooms.length}
+            label="Rooms"
+          />
+          <CardBoxWidget
+            // trendLabel="12%"
+            // trendType="up"
+            trendColor="success"
+            icon={mdiMagicStaff}
+            iconColor="info"
+            number={showTypes.length}
+            label="Show Types"
+          />
+          <CardBoxWidget
+            // trendLabel="12%"
+            // trendType="up"
+            trendColor="success"
+            icon={mdiTheater}
+            iconColor="danger"
+            number={shows.length}
+            label="Shows"
+          />
+          <CardBoxWidget
+            // trendLabel="12%"
+            // trendType="up"
+            trendColor="success"
+            icon={mdiTicket}
+            iconColor="warning"
+            number={tickets.length}
+            label="Tickets"
+          />
+          <CardBoxWidget
+            // trendLabel="12%"
+            // trendType="up"
             trendColor="success"
             icon={mdiAccountMultiple}
             iconColor="success"
-            number={512}
+            number={users.length}
             label="Clients"
           />
           <CardBoxWidget
-            trendLabel="16%"
-            trendType="down"
+            // trendLabel="16%"
+            // trendType="down"
             trendColor="danger"
-            icon={mdiCartOutline}
-            iconColor="info"
+            icon={mdiCashMultiple}
+            iconColor="success"
             number={7770}
-            numberPrefix="$"
+            numberPrefix="TND "
             label="Sales"
           />
-          <CardBoxWidget
+          {/* <CardBoxWidget
             trendLabel="Overflow"
             trendType="warning"
             trendColor="warning"
@@ -76,8 +215,16 @@ const DashboardPage = () => {
             number={256}
             numberSuffix="%"
             label="Performance"
-          />
+          /> */}
         </div>
+
+        <SectionTitleLineWithButton icon={mdiAccountMultiple} title="Clients" />
+
+        <CardBox hasTable>
+          <TableSampleClients 
+            clients={users}
+           />
+        </CardBox>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div className="flex flex-col justify-between">
@@ -98,11 +245,6 @@ const DashboardPage = () => {
 
         <CardBox className="mb-6">{chartData && <ChartLineSample data={chartData} />}</CardBox>
 
-        <SectionTitleLineWithButton icon={mdiAccountMultiple} title="Clients" />
-
-        <CardBox hasTable>
-          <TableSampleClients />
-        </CardBox>
       </SectionMain>
     </>
   )

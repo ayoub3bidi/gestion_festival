@@ -1,14 +1,11 @@
-import { mdiEye, mdiTrashCan } from '@mdi/js'
+import { mdiTrashCan } from '@mdi/js'
 import React, { useState } from 'react'
-import { useSampleClients } from '../../hooks/sampleData'
-import { Client } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import CardBoxModal from '../CardBox/Modal'
 import UserAvatar from '../UserAvatar'
 
-const TableSampleClients = () => {
-  const { clients } = useSampleClients()
+const TableSampleClients = ({clients}) => {
 
   const perPage = 5
 
@@ -24,32 +21,16 @@ const TableSampleClients = () => {
     pagesList.push(i)
   }
 
-  const [isModalInfoActive, setIsModalInfoActive] = useState(false)
   const [isModalTrashActive, setIsModalTrashActive] = useState(false)
 
   const handleModalAction = () => {
-    setIsModalInfoActive(false)
     setIsModalTrashActive(false)
   }
 
   return (
     <>
       <CardBoxModal
-        title="Sample modal"
-        buttonColor="info"
-        buttonLabel="Done"
-        isActive={isModalInfoActive}
-        onConfirm={handleModalAction}
-        onCancel={handleModalAction}
-      >
-        <p>
-          Lorem ipsum dolor sit amet <b>adipiscing elit</b>
-        </p>
-        <p>This is sample modal</p>
-      </CardBoxModal>
-
-      <CardBoxModal
-        title="Please confirm"
+        title="Delete a client"
         buttonColor="danger"
         buttonLabel="Confirm"
         isActive={isModalTrashActive}
@@ -57,9 +38,9 @@ const TableSampleClients = () => {
         onCancel={handleModalAction}
       >
         <p>
-          Lorem ipsum dolor sit amet <b>adipiscing elit</b>
+          Are you sure you want to delete this client?
         </p>
-        <p>This is sample modal</p>
+        <p>This action cannot be undone.</p>
       </CardBoxModal>
 
       <table>
@@ -67,42 +48,23 @@ const TableSampleClients = () => {
           <tr>
             <th />
             <th>Name</th>
-            <th>Company</th>
-            <th>City</th>
-            <th>Progress</th>
-            <th>Created</th>
+            <th>Email</th>
+            <th>Occupation</th>
+            <th>Actions</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          {clientsPaginated.map((client: Client) => (
+          {clientsPaginated.map((client) => (
             <tr key={client.id}>
               <td className="border-b-0 lg:w-6 before:hidden">
-                <UserAvatar username={client.name} className="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+                <UserAvatar username={client.username} className="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
               </td>
-              <td data-label="Name">{client.name}</td>
-              <td data-label="Company">{client.company}</td>
-              <td data-label="City">{client.city}</td>
-              <td data-label="Progress" className="lg:w-32">
-                <progress
-                  className="flex w-2/5 self-center lg:w-full"
-                  max="100"
-                  value={client.progress}
-                >
-                  {client.progress}
-                </progress>
-              </td>
-              <td data-label="Created" className="lg:w-1 whitespace-nowrap">
-                <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
-              </td>
+              <td data-label="Name">{client.username}</td>
+              <td data-label="Email">{client.email}</td>
+              <td data-label="job">{client.job}</td>
               <td className="before:hidden lg:w-1 whitespace-nowrap">
                 <Buttons type="justify-start lg:justify-end" noWrap>
-                  <Button
-                    color="info"
-                    icon={mdiEye}
-                    onClick={() => setIsModalInfoActive(true)}
-                    small
-                  />
                   <Button
                     color="danger"
                     icon={mdiTrashCan}

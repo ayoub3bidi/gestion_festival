@@ -5,6 +5,7 @@ import AsideMenuItem from './Item'
 import AsideMenuList from './List'
 import { MenuAsideItem } from '../../interfaces'
 import { useAppSelector } from '../../stores/hooks'
+import { useRouter } from 'next/router'
 
 type Props = {
   menu: MenuAsideItem[]
@@ -27,6 +28,13 @@ export default function AsideMenuLayer({ menu, className = '', ...props }: Props
     props.onAsideLgCloseClick()
   }
 
+  const router = useRouter()
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    router.push("/")
+  }
+
   return (
     <aside
       className={`${className} zzz lg:py-2 lg:pl-2 w-60 fixed flex z-40 top-0 h-screen transition-position overflow-hidden`}
@@ -37,9 +45,6 @@ export default function AsideMenuLayer({ menu, className = '', ...props }: Props
         <div
           className={`aside-brand flex flex-row h-14 items-center justify-between dark:bg-slate-900`}
         >
-          <div className="text-center flex-1 lg:text-left lg:pl-6 xl:text-center xl:pl-0">
-            <b className="font-black">One</b>
-          </div>
           <button
             className="hidden lg:inline-block xl:hidden p-3"
             onClick={handleAsideLgCloseClick}
@@ -54,8 +59,8 @@ export default function AsideMenuLayer({ menu, className = '', ...props }: Props
         >
           <AsideMenuList menu={menu} />
         </div>
-        <ul>
-          <AsideMenuItem item={logoutItem} />
+        <ul onClick={() => handleLogout()}>
+          <AsideMenuItem item={logoutItem}/>
         </ul>
       </div>
     </aside>

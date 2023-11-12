@@ -1,16 +1,10 @@
 import {
-  mdiAccountCircle,
   mdiMonitor,
-  mdiGithub,
-  mdiLock,
-  mdiAlertCircle,
-  mdiSquareEditOutline,
-  mdiTable,
-  mdiViewList,
-  mdiTelevisionGuide,
-  mdiResponsive,
-  mdiPalette,
-  mdiVuejs,
+  mdiDoor,
+  mdiMagicStaff,
+  mdiAccount,
+  mdiTheater,
+  mdiTicket,
 } from '@mdi/js'
 import { MenuAsideItem } from './interfaces'
 
@@ -21,69 +15,35 @@ const menuAside: MenuAsideItem[] = [
     label: 'Dashboard',
   },
   {
-    href: '/tables',
-    label: 'Tables',
-    icon: mdiTable,
+    href: '/users',
+    icon: mdiAccount,
+    label: 'Users'
   },
   {
-    href: '/forms',
-    label: 'Forms',
-    icon: mdiSquareEditOutline,
+    href: '/rooms',
+    icon: mdiDoor,
+    label: 'Rooms'
   },
   {
-    href: '/ui',
-    label: 'UI',
-    icon: mdiTelevisionGuide,
+    href: '/showTypes',
+    icon: mdiMagicStaff,
+    label: 'Show types'
   },
   {
-    href: '/responsive',
-    label: 'Responsive',
-    icon: mdiResponsive,
+    href: '/shows',
+    icon: mdiTheater,
+    label: "Shows"
   },
   {
-    href: '/',
-    label: 'Styles',
-    icon: mdiPalette,
-  },
-  {
-    href: '/profile',
-    label: 'Profile',
-    icon: mdiAccountCircle,
-  },
-  {
-    href: '/login',
-    label: 'Login',
-    icon: mdiLock,
-  },
-  {
-    href: '/error',
-    label: 'Error',
-    icon: mdiAlertCircle,
-  },
-  {
-    label: 'Dropdown',
-    icon: mdiViewList,
-    menu: [
-      {
-        label: 'Item One',
-      },
-      {
-        label: 'Item Two',
-      },
-    ],
-  },
-  {
-    href: 'https://github.com/justboil/admin-one-react-tailwind',
-    label: 'GitHub',
-    icon: mdiGithub,
-    target: '_blank',
-  },
-  {
-    href: 'https://github.com/justboil/admin-one-vue-tailwind',
-    label: 'Vue version',
-    icon: mdiVuejs,
-    target: '_blank',
-  },
+    href: '/tickets',
+    icon: mdiTicket,
+    label: "Tickets"
+  }
+  // {
+  //   href: '/tables',
+  //   label: 'Tables',
+  //   icon: mdiTable,
+  // },
 ]
 
 export default menuAside

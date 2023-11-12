@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
@@ -6,9 +6,11 @@ import Divider from '../../Divider'
 import Icon from '../../Icon'
 import UserAvatarCurrentUser from '../../UserAvatar/CurrentUser'
 import NavBarMenuList from '../MenuList'
-import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
+import { useAppDispatch } from '../../../stores/hooks'
 import { MenuNavBarItem } from '../../../interfaces'
 import { setDarkMode } from '../../../stores/darkModeSlice'
+import axios from 'axios'
+import { apiLink } from '../../../config'
 
 type Props = {
   item: MenuNavBarItem
@@ -16,8 +18,31 @@ type Props = {
 
 export default function NavBarItem({ item }: Props) {
   const dispatch = useAppDispatch()
+  const [userName, setUserName] = useState('')
 
-  const userName = useAppSelector((state) => state.main.userName)
+  const token = localStorage.getItem('token')
+
+  const handleGetUser = async () => {
+    const response = await axios.get(`${apiLink}/user`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    return response.data
+  }
+
+  useEffect(() => {
+    if (token) {
+      handleGetUser().then((data) => {
+        setUserName(data.username)
+      })
+    } else {
+      // const userName = useAppSelector((state) => state.main.userName)
+      setUserName("John Doe")
+    }
+  } , [])
+  
 
   const [isDropdownActive, setIsDropdownActive] = useState(false)
 

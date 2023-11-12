@@ -14,70 +14,77 @@ import { getPageTitle } from '../config'
 import axios from 'axios'
 import { apiLink } from '../config'
 
-type LoginForm = {
+type RegisterForm = {
+  username: string
   email: string
+  job: string
   password: string
 }
 
-const LoginPage = () => {
+const jobsList = [
+  'Teacher',
+  'Student',
+  'Doctor',
+  'Engineer',
+  'Programmer',
+  'Designer',
+  'Other',
+]
+
+const RegisterPage = () => {
   const router = useRouter()
 
-  const handlePagesDirection = async (token) => {
+  const handleSubmit = async (formValues: RegisterForm) => {
     try {
-      const response = await axios.get(`${apiLink}/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data.is_admin) {
-        // router.push({
-        //   pathname: '/dashboard',
-        //   query: { token: token },
-        // })
-        localStorage.setItem('token', token)
-        router.push('/dashboard')
-      } else {
-        // TODO: redirect to user page
-        router.push('/home')
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const handleSubmit = async (formValues: LoginForm) => {
-    try {
-      const response = await axios.post(`${apiLink}/user/login`, {
+      await axios.post(`${apiLink}/user/register`, {
+        username: formValues.username,
         email: formValues.email,
+        job: formValues.job,
         password: formValues.password,
       });
-      await handlePagesDirection(response.data.token.access_token)
+      router.push({
+        pathname: '/login',
+        query: { email: formValues.email, password: formValues.password},
+      })
     } catch (error) {
       console.log(error);
     }
   }
 
-  const sendedEmail = router.query.email
-  const sendedPassword = router.query.password
-
-  const initialValues: LoginForm = {
-    email: sendedEmail ? sendedEmail.toString() : 'admin@festival.io',
-    password: sendedPassword ? sendedPassword.toString(): 'GoodPassword123',
+  const initialValues: RegisterForm = {
+    username: 'hello',
+    email: 'hello@gmail.com',
+    job: jobsList[0],
+    password: 'GoodPassword123',
   }
 
   return (
     <>
       <Head>
-        <title>{getPageTitle('Login')}</title>
+        <title>{getPageTitle('Register')}</title>
       </Head>
 
       <SectionFullScreen bg="purplePink">
         <CardBox className="w-11/12 md:w-7/12 lg:w-6/12 xl:w-4/12 shadow-2xl">
-          <h1 className="text-3xl text-center font-bold mb-3">Login</h1>
+        <h1 className="text-3xl text-center font-bold mb-3">Register</h1>
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             <Form>
+              <FormField label="Username" help="Please enter your username">
+                <Field name="username" />
+              </FormField>
+
               <FormField label="Email" help="Please enter your email">
                 <Field name="email" />
+              </FormField>
+
+              <FormField label="Job" help="Please enter your job">
+                <Field name="job" as="select">
+                  {jobsList.map((job) => (
+                    <option key={job} value={job}>
+                      {job}
+                    </option>
+                  ))}
+                </Field>
               </FormField>
 
               <FormField label="Password" help="Please enter your password">
@@ -86,8 +93,8 @@ const LoginPage = () => {
               <Divider />
 
               <Buttons>
-                <Button type="submit" label="Login" color="info" />
-                <Button type="button" label="Register" color="contrast" onClick={() => router.push('/register')} />
+                <Button type="submit" label="register" color="info" />
+                <Button type="button" label="go back login" color="contrast" onClick={() => router.push('/login')} />
               </Buttons>
             </Form>
           </Formik>
@@ -97,8 +104,8 @@ const LoginPage = () => {
   )
 }
 
-LoginPage.getLayout = function getLayout(page: ReactElement) {
+RegisterPage.getLayout = function getLayout(page: ReactElement) {
   return <LayoutGuest>{page}</LayoutGuest>
 }
 
-export default LoginPage
+export default RegisterPage

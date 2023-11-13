@@ -4,12 +4,15 @@ import Button from '../Button'
 import Buttons from '../Buttons'
 import CardBoxModal from '../CardBox/Modal'
 import UserAvatar from '../UserAvatar'
+import axios from 'axios'
+import { apiLink } from '../../config'
 
 const TableSampleClients = ({clients}) => {
 
   const perPage = 5
 
   const [currentPage, setCurrentPage] = useState(0)
+  const [client, setClient] = useState(clients[0])
 
   const clientsPaginated = clients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
@@ -27,6 +30,25 @@ const TableSampleClients = ({clients}) => {
     setIsModalTrashActive(false)
   }
 
+  const token = localStorage.getItem('token')
+
+  const handleDeleteClient = async () => {
+    try {
+      const response = await axios.delete(`${apiLink}/admin/user/${client.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      if (response.status === 204) {
+        handleModalAction()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <CardBoxModal
@@ -34,7 +56,7 @@ const TableSampleClients = ({clients}) => {
         buttonColor="danger"
         buttonLabel="Confirm"
         isActive={isModalTrashActive}
-        onConfirm={handleModalAction}
+        onConfirm={handleDeleteClient}
         onCancel={handleModalAction}
       >
         <p>
@@ -68,7 +90,7 @@ const TableSampleClients = ({clients}) => {
                   <Button
                     color="danger"
                     icon={mdiTrashCan}
-                    onClick={() => setIsModalTrashActive(true)}
+                    onClick={() => { setIsModalTrashActive(true); setClient(client) }}
                     small
                   />
                 </Buttons>

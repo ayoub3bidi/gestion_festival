@@ -14,9 +14,9 @@ const TableSampleClients = ({clients}) => {
   const [currentPage, setCurrentPage] = useState(0)
   const [client, setClient] = useState(null)
 
-  const clientsPaginated = clients > 0 ? clients.slice(perPage * currentPage, perPage * (currentPage + 1)) : []
+  const clientsPaginated = clients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
-  const numPages = clients > 0 ? clients.length / perPage : 0
+  const numPages = clients.length / perPage
 
   const pagesList = []
 

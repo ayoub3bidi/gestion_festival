@@ -7,8 +7,8 @@ import Icon from '../components/Icon'
 import NavBar from '../components/NavBar'
 import NavBarItemPlain from '../components/NavBar/Item/Plain'
 import AsideMenu from '../components/AsideMenu'
-import FormField from '../components/Form/Field'
-import { Field, Form, Formik } from 'formik'
+// import FormField from '../components/Form/Field'
+// import { Field, Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
 
 type Props = {
@@ -61,7 +61,7 @@ export default function LayoutAuthenticated({ children }: Props) {
           >
             <Icon path={mdiMenu} size="24" />
           </NavBarItemPlain>
-          <NavBarItemPlain useMargin>
+          {/* <NavBarItemPlain useMargin>
             <Formik
               initialValues={{
                 search: '',
@@ -74,7 +74,7 @@ export default function LayoutAuthenticated({ children }: Props) {
                 </FormField>
               </Form>
             </Formik>
-          </NavBarItemPlain>
+          </NavBarItemPlain> */}
         </NavBar>
         <AsideMenu
           isAsideMobileExpanded={isAsideMobileExpanded}

@@ -127,7 +127,6 @@ const TableSampleClients = ({isClient, isAddUser}) => {
     setUsername(client.username)
     setEmail(client.email)
     client.job == null ? setJob(jobsList[6]) : setJob(client.job)
-    // setJob(client.job == null ? jobsList[jobsList.length] : client.job)
     setIsAdmin(client.is_admin)
   }
 

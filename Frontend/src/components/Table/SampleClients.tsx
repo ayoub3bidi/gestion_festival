@@ -1,5 +1,5 @@
 import { mdiTrashCan } from '@mdi/js'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import CardBoxModal from '../CardBox/Modal'
@@ -7,12 +7,54 @@ import UserAvatar from '../UserAvatar'
 import axios from 'axios'
 import { apiLink } from '../../config'
 
-const TableSampleClients = ({clients}) => {
+const TableSampleClients = ({isClient}) => {
 
   const perPage = 5
 
   const [currentPage, setCurrentPage] = useState(0)
   const [client, setClient] = useState(null)
+  const [clients, setClients] = useState([])
+
+  const handleClients = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/admin/user/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      for (let i = 0; i < response.data.length; i++) {
+        const user = response.data[i]
+        if (!user.is_admin) {
+          setClients((prev) => [...prev, user])
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const handleUsers = async () => {
+    try {
+      const response = await axios.get(`${apiLink}/admin/user/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      for (let i = 0; i < response.data.length; i++) {
+        const user = response.data[i]
+        setClients((prev) => [...prev, user])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   const clientsPaginated = clients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
@@ -48,6 +90,16 @@ const TableSampleClients = ({clients}) => {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    if (token) {
+      if (isClient) {
+        handleClients()
+      } else {
+        handleUsers()
+      }
+    }
+  }, [])
 
   return (
     <>

@@ -133,7 +133,7 @@ const DashboardPage = () => {
 
   React.useEffect(() => {
     if (token) {
-      handleClients()
+      handleClients
       handleRooms()
       handleShowTypes()
       handleShows()
@@ -222,7 +222,7 @@ const DashboardPage = () => {
 
         <CardBox hasTable>
           <TableSampleClients 
-            clients={users}
+            isClient={true}
            />
         </CardBox>
 

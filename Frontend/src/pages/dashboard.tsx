@@ -52,19 +52,15 @@ const DashboardPage = () => {
 
   const handleClients = async () => {
     try {
-      const response = await axios.get(`${apiLink}/admin/user/all`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${apiLink}/admin/user/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
-      for (let i = 0; i < response.data.length; i++) {
-        const user = response.data[i]
-        if (!user.is_admin) {
-          setUsers((prev) => [...prev, user])
-        }
-      }
+      })
+  
+      const filteredClients = response.data.filter((user) => !user.is_admin)
+  
+      setUsers(filteredClients)
     } catch (error) {
       console.log(error)
     }
@@ -223,6 +219,7 @@ const DashboardPage = () => {
         <CardBox hasTable>
           <TableSampleClients 
             isClient={true}
+            isAddUser={false}
            />
         </CardBox>
 

@@ -1,4 +1,4 @@
-import { mdiTrashCan } from '@mdi/js'
+import { mdiPencil, mdiTrashCan } from '@mdi/js'
 import React, { useEffect, useState } from 'react'
 import Button from '../Button'
 import Buttons from '../Buttons'
@@ -31,7 +31,6 @@ const TableSampleClients = ({isClient, isAddUser}) => {
     }
   }  
 
-
   const handleUsers = async () => {
     try {
       const response = await axios.get(`${apiLink}/admin/user/all`, {
@@ -47,8 +46,6 @@ const TableSampleClients = ({isClient, isAddUser}) => {
     }
   }  
 
-
-
   const clientsPaginated = clients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
   const numPages = clients.length / perPage
@@ -60,6 +57,22 @@ const TableSampleClients = ({isClient, isAddUser}) => {
   }
 
   const [isModalTrashActive, setIsModalTrashActive] = useState(false)
+  const [isModalEditActive, setIsModalEditActive] = useState(false)
+
+  const jobsList = [
+    'Teacher',
+    'Student',
+    'Doctor',
+    'Engineer',
+    'Programmer',
+    'Designer',
+    'Other',
+  ]
+
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [job, setJob] = useState(jobsList[0])
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const handleModalAction = () => {
     setIsModalTrashActive(false)
@@ -84,6 +97,40 @@ const TableSampleClients = ({isClient, isAddUser}) => {
     }
   }
 
+  const handleUpdateUser = async () => {
+    console.log(client.id)
+    try {
+      const body = {
+        username: username,
+        email: email,
+        job: job,
+        isAdmin: isAdmin,
+      }
+      console.log(body)
+      const response = await axios.patch(`${apiLink}/admin/user/${client.id}`,
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      if (response.status === 200) {
+        setIsModalEditActive(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const setClientData = (client) => {
+    setUsername(client.username)
+    setEmail(client.email)
+    client.job == null ? setJob(jobsList[6]) : setJob(client.job)
+    // setJob(client.job == null ? jobsList[jobsList.length] : client.job)
+    setIsAdmin(client.is_admin)
+  }
+
   useEffect(() => {
     if (token) {
       if (isClient) {
@@ -93,10 +140,60 @@ const TableSampleClients = ({isClient, isAddUser}) => {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAddUser, isModalTrashActive])
+  }, [isAddUser, isModalTrashActive, isModalEditActive])
 
   return (
     <>
+    <CardBoxModal
+      title="Update User"
+      buttonColor="success"
+      buttonLabel="Confirm"
+      isActive={isModalEditActive}
+      onConfirm={handleUpdateUser}
+      onCancel={() => setIsModalEditActive(false)}
+    >
+      <form>
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+          <input type="text" 
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+          <input type="email" 
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required 
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job</label>
+          <select 
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => setJob(e.target.value)}
+            value={job}
+            >
+              {
+                jobsList.map((job) => (
+                  <option key={job} value={job}>
+                    {job}
+                  </option>
+                ))
+              }
+          </select>
+        </div>
+        <label className="relative inline-flex items-center mb-5 cursor-pointer">
+          <input type="checkbox" checked={isAdmin} className="sr-only peer" onChange={(e) => setIsAdmin(e.target.checked)} />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Admin</span>
+        </label>
+      </form>
+    </CardBoxModal>
       <CardBoxModal
         title="Delete a client"
         buttonColor="danger"
@@ -133,6 +230,12 @@ const TableSampleClients = ({isClient, isAddUser}) => {
               <td data-label="job">{client.job}</td>
               <td className="before:hidden lg:w-1 whitespace-nowrap">
                 <Buttons type="justify-start lg:justify-end" noWrap>
+                  <Button
+                    color='info'
+                    icon={mdiPencil}
+                    onClick={() => { setIsModalEditActive(true); setClient(client); setClientData(client)}}
+                    small
+                  />
                   <Button
                     color="danger"
                     icon={mdiTrashCan}

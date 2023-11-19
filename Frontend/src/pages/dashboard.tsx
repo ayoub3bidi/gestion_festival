@@ -129,7 +129,7 @@ const DashboardPage = () => {
 
   React.useEffect(() => {
     if (token) {
-      handleClients
+      handleClients()
       handleRooms()
       handleShowTypes()
       handleShows()

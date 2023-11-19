@@ -7,7 +7,7 @@ import UserAvatar from '../UserAvatar'
 import axios from 'axios'
 import { apiLink } from '../../config'
 
-const TableSampleClients = ({isClient}) => {
+const TableSampleClients = ({isClient, isAddUser}) => {
 
   const perPage = 5
 
@@ -99,7 +99,8 @@ const TableSampleClients = ({isClient}) => {
         handleUsers()
       }
     }
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAddUser, isModalTrashActive])
 
   return (
     <>

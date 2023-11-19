@@ -17,42 +17,35 @@ const TableSampleClients = ({isClient, isAddUser}) => {
 
   const handleClients = async () => {
     try {
-      const response = await axios.get(`${apiLink}/admin/user/all`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${apiLink}/admin/user/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
-      for (let i = 0; i < response.data.length; i++) {
-        const user = response.data[i]
-        if (!user.is_admin) {
-          setClients((prev) => [...prev, user])
-        }
-      }
+      })
+  
+      const filteredClients = response.data.filter((user) => !user.is_admin)
+  
+      setClients(filteredClients)
     } catch (error) {
       console.log(error)
     }
-  }
+  }  
 
 
   const handleUsers = async () => {
     try {
-      const response = await axios.get(`${apiLink}/admin/user/all`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${apiLink}/admin/user/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
-      for (let i = 0; i < response.data.length; i++) {
-        const user = response.data[i]
-        setClients((prev) => [...prev, user])
-      }
+      })
+  
+      const users = response.data.map((user) => user)
+      setClients(users)
     } catch (error) {
       console.log(error)
     }
-  }
+  }  
 
 
 

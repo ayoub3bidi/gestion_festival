@@ -52,6 +52,7 @@ def update_user(user_id, payload, db):
         user.update({"disabled": payload.disabled})
         
     db.commit()
+    db.refresh(existing_user)
 
     return {
         "message": "user been updated successfully"

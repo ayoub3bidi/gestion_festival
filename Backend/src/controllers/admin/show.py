@@ -21,6 +21,11 @@ def add_show(payload, db):
     room = db.query(Room).filter(Room.id == payload.room_id).first()
     if not room:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Room with id {payload.room_id} not found")
+    ## check if room is exceptional, if yes, check if room is filled up to 75%
+    if payload.is_exceptional:
+        room_fill_rate_in_percent = (payload.reserved_seats / room.capacity) * 100
+        if room_fill_rate_in_percent > 75:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Room with id {payload.room_id} is an exceptional room and can only be filled up to 75% of its capacity, reservation is stopping now")
     ## Check if room capacity is enough
     if room.capacity < payload.reserved_seats:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Room capacity is {room.capacity} but {new_show.reserved_seats} seats are reserved")

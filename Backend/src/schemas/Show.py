@@ -7,7 +7,6 @@ class ShowSchema(BaseModel):
     time: str
     duration: int
     reserved_seats: int
-    available_seats: int
     room_name: str
     show_type: str
     price_normal: float

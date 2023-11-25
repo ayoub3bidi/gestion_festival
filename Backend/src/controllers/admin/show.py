@@ -16,6 +16,10 @@ def add_show(payload, db):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Show with id {show.id} is already scheduled at this time")
         if show_time + show_duration > show.time:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Show with id {show.id} is already scheduled at this time")
+    ## Check if room exist
+    room = db.query(Show).filter(Show.room_id == payload.room_id).first()
+    if not room:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Room with id {payload.room_id} not found")
     ## Check if room capacity is enough
     room_capacity = db.query(Show).filter(Show.room_id == new_show.room_id).capacity
     if room_capacity < new_show.reserved_seats:

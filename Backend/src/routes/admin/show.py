@@ -6,7 +6,7 @@ from middleware.auth_guard import get_current_admin_user
 from schemas.User import UserSchema
 from schemas.Show import ShowSchema
 from models.Show import Show
-from controllers.admin.show import add_show, update_show_by_id
+from controllers.admin.show import add_show, update_show_by_id, delete_show_by_id
 
 router = APIRouter()
 
@@ -20,5 +20,9 @@ def create_show(current_user: Annotated[UserSchema, Depends(get_current_admin_us
     return add_show(payload, db)
 
 @router.patch("/{show_id}", status_code=status.HTTP_200_OK)
-def update_show(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], show_id: int, payload: ShowSchema, db: Session = Depends(get_db)):
+def update_show(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], show_id: str, payload: ShowSchema, db: Session = Depends(get_db)):
     return update_show_by_id(show_id, payload, db)
+
+@router.delete("/{show_id}", status_code=status.HTTP_200_OK)
+def delete_show(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], show_id: str, db: Session = Depends(get_db)):
+    return delete_show_by_id(show_id, db)

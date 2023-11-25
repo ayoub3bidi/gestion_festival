@@ -3,7 +3,6 @@ from pydantic import BaseModel
 
 class TicketSchema(BaseModel):
     show_id: str
-    user_id: str
     
     class Config:
         orm_mode = True

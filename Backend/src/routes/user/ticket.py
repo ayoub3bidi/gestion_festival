@@ -1,7 +1,7 @@
 from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi import Depends, status, APIRouter
-from Backend.src.controllers.user.ticket import add_ticket
+from controllers.user.ticket import add_ticket
 from database.postgres_db import get_db
 from middleware.auth_guard import get_current_user
 from schemas.User import UserSchema

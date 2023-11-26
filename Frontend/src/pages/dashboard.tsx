@@ -38,6 +38,7 @@ const DashboardPage = () => {
   const [showTypes, setShowTypes] = useState([])
   const [shows, setShows] = useState([])
   const [tickets, setTickets] = useState([])
+  const [profit, setProfit] = useState(0)
 
 
   const [chartData, setChartData] = useState(sampleChartData())
@@ -113,14 +114,15 @@ const DashboardPage = () => {
 
   const handleTickets = async () => {
     try {
-      const response = await axios.get(`${apiLink}/ticket`,
+      const response = await axios.get(`${apiLink}/admin/ticket`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       )
-      setTickets(response.data)
+      setTickets(response.data.tickets)
+      setProfit(response.data.total_profit)
     } catch (error) {
       console.log(error)
     }
@@ -198,7 +200,7 @@ const DashboardPage = () => {
             trendColor="danger"
             icon={mdiCashMultiple}
             iconColor="success"
-            number={7770}
+            number={profit}
             numberPrefix="TND "
             label="Sales"
           />

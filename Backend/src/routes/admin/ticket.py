@@ -17,7 +17,7 @@ def get_all_tickets(current_user: Annotated[UserSchema, Depends(get_current_admi
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create_ticket(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], payload: TicketAdminSchema, db: Session = Depends(get_db)):
-    return add_ticket(payload, db)
+    return add_ticket(current_user, payload, db)
 
 @router.patch("/{ticket_id}", status_code=status.HTTP_200_OK)
 def update_ticket(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], ticket_id: int, payload: TicketAdminSchema, db: Session = Depends(get_db)):

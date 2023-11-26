@@ -14,13 +14,16 @@ def add_ticket(current_user, payload, db):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Show with id {payload.show_id} is an exceptional show and can only be filled up to 75% of its capacity, reservation is stopping now")
     show.available_seats -= 1
     if current_user.job == "student" or current_user.job == "enfant":
-        payload.price = show.price_reduced
+        price = show.price_reduced
     else:
-        payload.price = show.price_normal
+        price = show.price_normal
     db.add(show)
     db.commit()
     db.refresh(show)
-    new_ticket = Ticket(**payload.dict())
+    new_ticket = Ticket()
+    new_ticket.user_id = current_user.id
+    new_ticket.show_id = payload.show_id
+    new_ticket.price = price
     db.add(new_ticket)
     db.commit()
     db.refresh(new_ticket)

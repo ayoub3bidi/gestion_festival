@@ -13,7 +13,10 @@ router = APIRouter()
 @router.get("", status_code=status.HTTP_200_OK)
 def get_all_tickets(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], db: Session = Depends(get_db)):
     tickets = db.query(Ticket).all()
-    return tickets
+    total_profit = 0
+    for ticket in tickets:
+        total_profit += ticket.price
+    return {"tickets": tickets, "total_profit": total_profit}
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create_ticket(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], payload: TicketAdminSchema, db: Session = Depends(get_db)):

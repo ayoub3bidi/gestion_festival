@@ -23,10 +23,12 @@ import CardBoxClient from '../components/CardBox/Client'
 // import SectionBannerStarOnGitHub from '../components/Section/Banner/StarOnGitHub'
 import CardBox from '../components/CardBox'
 import { sampleChartData } from '../components/ChartLineSample/config'
-import ChartLineSample from '../components/ChartLineSample'
+// import ChartLineSample from '../components/ChartLineSample'
+import ChartBarSample from '../components/ChartBarSample'
 import TableSampleClients from '../components/Table/SampleClients'
 import { apiLink, getPageTitle } from '../config'
 import axios from 'axios'
+import { showsChart } from '../components/ChartBarSample/config'
 
 const DashboardPage = () => {
   const { clients } = useSampleClients()
@@ -41,7 +43,9 @@ const DashboardPage = () => {
   const [profit, setProfit] = useState(0)
 
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [chartData, setChartData] = useState(sampleChartData())
+  const [showsChartData, setShowsChartData] = useState(null);
 
   const fillChartData = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -107,6 +111,8 @@ const DashboardPage = () => {
         },
       )
       setShows(response.data)
+      const chartData = showsChart(9, response.data);
+      setShowsChartData(chartData);
     } catch (error) {
       console.log(error)
     }
@@ -238,11 +244,14 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <SectionTitleLineWithButton icon={mdiChartPie} title="Trends overview">
+        <SectionTitleLineWithButton icon={mdiChartPie} title="Shows overview">
           <Button icon={mdiReload} color="whiteDark" onClick={fillChartData} />
         </SectionTitleLineWithButton>
 
-        <CardBox className="mb-6">{chartData && <ChartLineSample data={chartData} />}</CardBox>
+        {/* <CardBox className="mb-6">{chartData && <ChartLineSample data={chartData} />}</CardBox> */}
+        <CardBox className="mb-6">
+          {showsChartData && <ChartBarSample data={showsChartData} />}
+        </CardBox>
 
       </SectionMain>
     </>

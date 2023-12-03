@@ -1,10 +1,11 @@
 from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi import Depends, status, APIRouter
-from controllers.admin.user import add_user, delete_user, update_user
+from controllers.admin.user import add_user, delete_user, update_user, get_linear_regression_chart
 from database.postgres_db import get_db
 from middleware.auth_guard import get_current_admin_user
 from models.User import User
+from schemas.Chart import LinearRegressionSchema
 from schemas.User import UserSchema, UserAdminRegisterSchema, UserAdminUpdateSchema
 from utils.filter import remove_password_from_users, remove_password_from_user
 
@@ -19,6 +20,10 @@ def get_all_users(current_user: Annotated[UserSchema, Depends(get_current_admin_
 def get_user_by_id(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], user_id: str, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     return remove_password_from_user(user)
+
+@router.post("/linear-regression-chart", status_code=status.HTTP_200_OK)
+def get_users_linear_regression_chart(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], payload: LinearRegressionSchema, db: Session = Depends(get_db)):
+    return get_linear_regression_chart (payload, db)
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register_user(current_user: Annotated[UserSchema, Depends(get_current_admin_user)], payload: UserAdminRegisterSchema, db: Session = Depends(get_db)):

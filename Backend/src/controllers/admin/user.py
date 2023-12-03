@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from models.User import User
 from utils.security import get_password_hash
 from utils.variables import is_not_empty
+from utils.charts import get_linear_regression
 
 
 def add_user(payload, db):
@@ -64,3 +65,8 @@ def delete_user(user_id, db):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     db.delete(user)
     db.commit()
+    
+    
+def get_linear_regression_chart(payload, db):
+    users = db.query(User).all()
+    return get_linear_regression(users, payload, "Users Linear Regression Chart")

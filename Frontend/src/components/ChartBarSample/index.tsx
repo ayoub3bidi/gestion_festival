@@ -22,8 +22,8 @@ const options = {
   },
 };
 
-const ChartLineSample = ({ data }) => {
+const ChartBarSample = ({ data }) => {
   return <Bar options={options} data={data} className="h-96" />;
 };
 
-export default ChartLineSample;
+export default ChartBarSample;

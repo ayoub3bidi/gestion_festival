@@ -20,10 +20,8 @@ import { useSampleClients, useSampleTransactions } from '../hooks/sampleData'
 import CardBoxTransaction from '../components/CardBox/Transaction'
 import { Client, Transaction } from '../interfaces'
 import CardBoxClient from '../components/CardBox/Client'
-// import SectionBannerStarOnGitHub from '../components/Section/Banner/StarOnGitHub'
 import CardBox from '../components/CardBox'
 import { sampleChartData } from '../components/ChartLineSample/config'
-// import ChartLineSample from '../components/ChartLineSample'
 import ChartBarSample from '../components/ChartBarSample'
 import TableSampleClients from '../components/Table/SampleClients'
 import { apiLink, getPageTitle } from '../config'
@@ -151,13 +149,8 @@ const DashboardPage = () => {
         <title>{getPageTitle('Dashboard')}</title>
       </Head>
       <SectionMain>
-        {/* <div className="my-6">
-          <SectionBannerStarOnGitHub />
-        </div> */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
           <CardBoxWidget
-            // trendLabel="12%"
-            // trendType="up"
             trendColor="success"
             icon={mdiDoor}
             iconColor="contrast"
@@ -165,8 +158,6 @@ const DashboardPage = () => {
             label="Rooms"
           />
           <CardBoxWidget
-            // trendLabel="12%"
-            // trendType="up"
             trendColor="success"
             icon={mdiMagicStaff}
             iconColor="info"
@@ -174,8 +165,6 @@ const DashboardPage = () => {
             label="Show Types"
           />
           <CardBoxWidget
-            // trendLabel="12%"
-            // trendType="up"
             trendColor="success"
             icon={mdiTheater}
             iconColor="danger"
@@ -183,8 +172,6 @@ const DashboardPage = () => {
             label="Shows"
           />
           <CardBoxWidget
-            // trendLabel="12%"
-            // trendType="up"
             trendColor="success"
             icon={mdiTicket}
             iconColor="warning"
@@ -192,8 +179,6 @@ const DashboardPage = () => {
             label="Tickets"
           />
           <CardBoxWidget
-            // trendLabel="12%"
-            // trendType="up"
             trendColor="success"
             icon={mdiAccountMultiple}
             iconColor="success"
@@ -201,8 +186,6 @@ const DashboardPage = () => {
             label="Clients"
           />
           <CardBoxWidget
-            // trendLabel="16%"
-            // trendType="down"
             trendColor="danger"
             icon={mdiCashMultiple}
             iconColor="success"
@@ -210,16 +193,6 @@ const DashboardPage = () => {
             numberPrefix="TND "
             label="Sales"
           />
-          {/* <CardBoxWidget
-            trendLabel="Overflow"
-            trendType="warning"
-            trendColor="warning"
-            icon={mdiChartTimelineVariant}
-            iconColor="danger"
-            number={256}
-            numberSuffix="%"
-            label="Performance"
-          /> */}
         </div>
 
         <SectionTitleLineWithButton icon={mdiAccountMultiple} title="Clients" />
@@ -247,8 +220,6 @@ const DashboardPage = () => {
         <SectionTitleLineWithButton icon={mdiChartPie} title="Shows overview">
           <Button icon={mdiReload} color="whiteDark" onClick={fillChartData} />
         </SectionTitleLineWithButton>
-
-        {/* <CardBox className="mb-6">{chartData && <ChartLineSample data={chartData} />}</CardBox> */}
         <CardBox className="mb-6">
           {showsChartData && <ChartBarSample data={showsChartData} />}
         </CardBox>

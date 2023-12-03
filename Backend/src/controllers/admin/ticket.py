@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from models.Ticket import Ticket
 from models.Show import Show
 from models.User import User
+from utils.charts import get_linear_regression
 
 def add_ticket(current_user, payload, db):
     show = db.query(Show).filter(Show.id == payload.show_id).first()
@@ -56,3 +57,7 @@ def delete_ticket_by_id(id, db):
     db.delete(ticket)
     db.commit()
     return {"message": f"Ticket with id {id} deleted successfully"}
+
+def get_linear_regression_chart(payload, db):
+    shows = db.query(Show).filter(Show.is_available == True).all()
+    return get_linear_regression(shows, payload, "Tickets Linear Regression Chart")

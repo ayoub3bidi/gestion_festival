@@ -19,4 +19,4 @@ def get_all_available_shows(current_user: Annotated[UserSchema, Depends(get_curr
 
 @router.post("/linear-regression-chart", status_code=status.HTTP_200_OK)
 def get_shows_linear_regression_chart(current_user: Annotated[UserSchema, Depends(get_current_active_user)], payload: LinearRegressionSchema, db: Session = Depends(get_db)):
-    return get_linear_regression_chart (payload, db)
+    return get_linear_regression_chart(payload, db)

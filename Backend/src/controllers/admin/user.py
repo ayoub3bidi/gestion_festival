@@ -67,6 +67,6 @@ def delete_user(user_id, db):
     db.commit()
     
     
-def get_linear_regression_chart(payload, db):
+def get_linear_regression_chart_for_users(payload, db):
     users = db.query(User).all()
     return get_linear_regression(users, payload, "Users Linear Regression Chart")

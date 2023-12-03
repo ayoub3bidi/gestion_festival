@@ -8,6 +8,7 @@ from routes.admin import room as admin_room
 from routes.admin import show_type as admin_show_type
 from routes.admin import show as admin_show
 from routes.admin import ticket as admin_ticket
+from routes import linear_regression_chart
 from constants.environment_variables import v
 
 def import_resources(app):
@@ -24,3 +25,5 @@ def import_resources(app):
     app.include_router(admin_show_type.router, tags=['Show Type Administration'], prefix=f'/{v}/admin/show-type')
     app.include_router(admin_show.router, tags=['Show Administration'], prefix=f'/{v}/admin/show')
     app.include_router(admin_ticket.router, tags=['Ticket Administration'], prefix=f'/{v}/admin/ticket')
+    #? Charts routes
+    app.include_router(linear_regression_chart.router, tags=['Linear Regression Chart'], prefix=f'/{v}/linear-regression-chart')

@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from models.Ticket import Ticket
 from models.Show import Show
 from models.User import User
-from utils.charts import get_linear_regression
+from utils.charts import get_linear_regression, get_kmeans_classification, get_decision_tree
 
 def add_ticket(current_user, payload, db):
     show = db.query(Show).filter(Show.id == payload.show_id).first()
@@ -61,3 +61,11 @@ def delete_ticket_by_id(id, db):
 def get_linear_regression_chart_for_tickets(payload, db):
     shows = db.query(Show).filter(Show.is_available == True).all()
     return get_linear_regression(shows, payload, "Tickets Linear Regression Chart")
+
+def get_kmeans_classification_chart_for_tickets(db):
+    shows = db.query(Show).filter(Show.is_available == True).all()
+    return get_kmeans_classification(shows, "Tickets KMeans Classification Chart")
+
+def get_decision_tree_chart_for_tickets(payload, db):
+    shows = db.query(Show).filter(Show.is_available == True).all()
+    return get_decision_tree(shows, payload, "Tickets Decision Tree Chart")

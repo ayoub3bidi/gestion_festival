@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from models.User import User
 from utils.security import get_password_hash
 from utils.variables import is_not_empty
-from utils.charts import get_linear_regression
+from utils.charts import get_linear_regression, get_kmeans_classification, get_decision_tree
 
 
 def add_user(payload, db):
@@ -70,3 +70,11 @@ def delete_user(user_id, db):
 def get_linear_regression_chart_for_users(payload, db):
     users = db.query(User).all()
     return get_linear_regression(users, payload, "Users Linear Regression Chart")
+
+def get_kmeans_classification_chart_for_users(payload, db):
+    users = db.query(User).all()
+    return get_kmeans_classification(users, payload, "Users KMeans Classification Chart")
+
+def get_decision_tree_chart_for_users(payload, db):
+    users = db.query(User).all()
+    return get_decision_tree(users, payload, "Users Decision Tree Chart")

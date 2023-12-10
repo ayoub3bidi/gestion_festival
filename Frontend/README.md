@@ -1,41 +1,17 @@
-# Gestion fes
+# Gestion de festival - Partie Frontend
+Ce projet représente le frontend du projet de gestion des festivals. Ce projet utilise Next.js, un framework frontal, ainsi que Tailwind CSS pour créer des interfaces web.
 
-#### Install
+## Configuration du projet
 
-`cd` to project's dir and run `npm install`
-
-### Builds
-
-Build are handled by Next.js CLI &mdash; [Info](https://nextjs.org/docs/api-reference/cli)
-
-#### Hot-reloads for development
-
+### Installer les dépendances
+```shell
+cd Frontend
+npm install
 ```
+Cette commande installera tous les node_modules nécessaires à l'exécution du projet.
+
+### Exécuter le projet
+```shell
 npm run dev
 ```
-
-#### Builds and minifies for production
-
-```
-npm run build
-```
-
-#### Exports build for static hosts
-
-```
-npm run export
-```
-
-### Linting & Formatting
-
-#### Lint
-
-```
-npm run lint
-```
-
-#### Format with prettier
-
-```
-npm run format
-```
+Cetter permettera d'exécuter le projects sur [localhost:3000]("http://localhost:3000/gestion-festival").

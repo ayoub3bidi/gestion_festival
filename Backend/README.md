@@ -1,9 +1,9 @@
-# Gestion de festival
-Un mini projet pour la matière mini projet: python avancé (Mastère Professionnel en Ingénierie du Logiciel - Open Source à l'ISI).
+# Gestion de festival - Partie Backend (projet principal)
+Ce projet représente le backend du projet de gestion des festivals, qui concentrait la quasi-totalité des efforts. Ce projet utilise le framework FastApi pour créer des api endpoints avec PostgreSQL comme base de données principale.
 ## Architecture de la base de données
 ![architecture](./assets/database_architecture.png)
 
-### Project architecture
+### Architecture de projet
 ```
 ├── src
 │ └── assets
@@ -30,11 +30,13 @@ Un mini projet pour la matière mini projet: python avancé (Mastère Profession
 │ └── restful_ressources.py
 ```
 
-### Run the containers
+### Exécuter le projet
+Il n'est pas nécessaire d'installer quoi que ce soit sur votre machine à l'exception de docker. vous pouvez exécuter le projet simplement en lançant cette commande :
 ```shell
+cd Backend
 docker-compose up --build --force-recreate
 ```
-## Test the database
+## Tester la base de données
 
 ```shell
 $ docker exec -it festival_db psql -U festival festival
@@ -42,9 +44,9 @@ psql (13.9 (Debian 13.9-1.pgdg110+1))
 Type "help" for help.
 ```
 
-## Test the API
+## Tester l'API
 
-You can check the Swagger documentation on http://localhost:8000.
+Vous pouvez consulter la documentation Swagger sur http://localhost:8000.
 
 ```shell
 $ curl localhost:8000/v1/health

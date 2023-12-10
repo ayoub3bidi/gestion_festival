@@ -1,6 +1,6 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.tree import DecisionTreeRegressor
 import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
@@ -60,15 +60,20 @@ def get_decision_tree(data, payload, title):
     # Convert data to a list of dictionaries
     data = [item.__dict__ for item in data]
     
-    X = np.array([[show[payload.x_attribute], show[payload.y_attribute]] for show in data])
-    y = np.array([show[payload.target_attribute] for show in data])
+    x = np.array([show[payload.x_attribute] for show in data]).reshape((-1, 1))
+    y = np.array([show[payload.y_attribute] for show in data])
 
-    clf = DecisionTreeClassifier(random_state=1234)
-    model = clf.fit(X, y)
+    model = DecisionTreeRegressor().fit(x, y)
 
-    fig, ax = plt.subplots(figsize=(10, 10))  # whatever size you want
-    plot_tree(clf, ax=ax)
+    # Sort x values for better visualization
+    x_sorted = np.sort(x, axis=0)
+    y_pred = model.predict(x_sorted)
+
+    plt.scatter(x, y, color='red')
+    plt.plot(x_sorted, y_pred, color='blue')
     plt.title(title)
+    plt.xlabel(payload.x_attribute)
+    plt.ylabel(payload.y_attribute)
 
     buf = BytesIO()
     plt.savefig(buf, format='png')
